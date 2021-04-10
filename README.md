@@ -10,7 +10,7 @@ First, you will need a Kaggle account as this script uses the Kaggle API to auhe
 
 When running the program, you will need to provide two arguments. The username of the user who posted the dataset on Kaggle and the name of the dataset. These can be found in the URL of the page where the dataset is. Ex. https://www.kaggle.com/USERNAME/TITLE-OF-DATASET.
 
-Provide the title of he dataset first, and then the username for your arguments. Make sure the dataset is a CSV file.
+Provide the title of the dataset first, and then the username for your arguments. Make sure the dataset is a CSV file.
 
 ## Outputs
 
