@@ -5,20 +5,22 @@
 This is a project for Data Science Systems (DS 3002) at UVA. This ETL pipeline part will fetch CSV datasets from Kaggle and then transform the CSV into TSV and JSON files. It will also output a summary of how many rows and columns the fetched dataset has.
 
 ## How to Use
+This uses Docker, so download that and then follow these instructions.
 
-First, you will need a Kaggle account as this script uses the Kaggle API to auhenticate. Once you have a Kaggle account, you will need your Kaggle username and unique API token. Your username should just be your username. To get your unique key: My Profile -> Account -> Scroll to API section and click "Create New API Token". This will download a file containing your username and unique key. Store this file in a folder called ".kaggle" in your root directory. This is where the Kaggle API is expecting the information to be. Another method is to store the values as environment variables. 
+First, you will need a Kaggle account as this script uses the Kaggle API to auhenticate. Once you have a Kaggle account, you will need your Kaggle username and unique API token. Your username should just be your username. To get your unique key: My Profile -> Account -> Scroll to API section and click "Create New API Token". This will download a file containing your username and unique key. In the Dockerfile, there are two fields in the ENV section called KAGGLE_USERNAME and KAGGLE_KEY. Both of these fields have dummy placements in them right now. Replace those values with your Kaggle username and the unique key you got from the file you downloaded containing those.
 
-Make sure you have Docker installed. To run the program, use **docker build -t etl_part .**           (Include the ".")
+To build the program, use the command line and type: **docker build -t etl_part .** (Include the ".")
 
-Note: When running the program, you will need to provide two arguments. The username of the user who posted the dataset on Kaggle and the name of the dataset. These can be found in the URL of the page where the dataset is. Ex. https://www.kaggle.com/USERNAME/TITLE-OF-DATASET.
+To run the program, you will need to provide *three* arguments. Otherwise it won't work. The three arguments you need to provide are these in this order: username of the owner of the data (from URL), title of the dataset (from URL), and the name of the folder that will hold the data. The script will create a folder with the name you provide, so don't worry about making a folder beforehand. However, make sure the folder name you provide doesn't already belong to an existing folder.
 
-Provide the title of the dataset first, and then the username for your arguments. Make sure the dataset is a CSV file.
+The username and title can be found in the URL of the page where the dataset is. Ex. https://www.kaggle.com/USERNAME/TITLE-OF-DATASET.
 
-To Run: **docker run -v ${PWD}:/data etl_part -i TITLE-OF-DATASET USERNAME**
+Provide the username first, title of dataset second, and the name of your folder third. 
 
+To Run (still in command line): **docker run -v ${PWD}:/data etl_part -i USERNAME TITLE-OF-DATASET FOLDER_NAME**
 
 ## Outputs
 
-After fetching the dataset, if successful, the program will output a TSV and JSON forms of the dataset and also how many rows and columns it has.
+After fetching the dataset, if successful, the program will output a folder under the name you provide and it will have the files downloaded from Kaggle, and TSV/JSON versions of all CSV files in the download (if there are no unicode or weird errors while creating those versions).
 
 
