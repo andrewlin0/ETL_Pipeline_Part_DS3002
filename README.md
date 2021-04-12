@@ -14,7 +14,7 @@ Note: When running the program, you will need to provide two arguments. The user
 
 Provide the title of the dataset first, and then the username for your arguments. Make sure the dataset is a CSV file.
 
-To Run: **docker run -v ${PWD}:/data etl-part -i [datasettitle] [owner's username]**
+To Run: **docker run -v ${PWD}:/data etl-part -i dataset_title owner's_username**
 
 
 ## Outputs
