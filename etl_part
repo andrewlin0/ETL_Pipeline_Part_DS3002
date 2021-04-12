@@ -1,0 +1,135 @@
+#!/usr/bin/python3
+
+import sys
+import getopt
+import csv
+import json
+import requests
+import pandas as pd
+import kaggle
+import os
+
+
+# Operation 1: Fetching from remote
+def fetch_from_kaggle(user, title, folder_name):
+    try:
+        # Authenticate to use Kaggle API
+        kaggle.api.authenticate()
+        # Download the dataset from Kaggle and put it into folder_name
+        kaggle.api.dataset_download_files(user + "/" + title, path=folder_name, unzip=True)
+    except:
+        print("Invalid username and/or dataset title")
+
+
+# Operation 2a: CSV -> TSV
+def csv_to_tsv(csv_path, out_tsv):
+    try: 
+        # CSV -> TSV
+        csv.writer(open(out_tsv, 'w+', encoding = 'utf-8'), delimiter='\t').writerows(csv.reader(open(csv_path)))
+    except:
+        print("Could not make into TSV")
+
+
+# Operation 2b: CSV -> JSON
+def csv_to_json(csv_path, json_path):
+    jsonArray = []
+    with open(csv_path, encoding = 'utf-8') as csvf:
+        
+        # Load csv file data using dictionary reader
+        csvReader = csv.DictReader(csvf)
+
+        # Convert each csv row into python dictionary
+        for row in csvReader:
+            jsonArray.append(row)
+    
+    # Convert Python jsonArray to JSON  String and write to file
+    with open(json_path, "w", encoding = 'utf-8') as jsonf:
+        jsonString = json.dumps(jsonArray, indent = 4)
+        jsonf.write(jsonString)
+
+
+# Operation 3: Brief Summary
+
+def numrows_cols(csv_path):
+    # Make the csv into a pandas dataframe
+    df = pd.read_csv(csv_path)
+    # Get number of rows
+    rows = df.shape[0]
+    # Get number of columns
+    cols = df.shape[1]
+    print("This file has " + str(rows) + " rows and " + str(cols) + " columns.")
+    
+
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "hi:o:", ["ifile="])
+    except getopt.GetoptError:
+        print("etl_part -i")
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == "-h":
+            print("convert -i <inputid>")
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            user = argv[1]
+            title = argv[2]
+            folder_name = argv[3]
+       
+
+    check1 = 0
+    check2 = 0
+    check3 = 0
+    try:
+        print("User is:", user)
+        check1 = 1
+    except:
+        print("Enter a Username")
+    
+    try:     
+        print("Title is:", title)
+        check2 = 1
+    except:
+        print("Enter the title of the data located in the URL")
+    
+    try:
+        print("Folder name is:", folder_name)
+        check3 = 1
+    except:
+        print("Enter a name for the folder that will be created for the data to be stored in")
+        
+
+    if check1 == 1 and check2 == 1 and check3 == 1:
+        # Fetch the data
+        fetch_from_kaggle(user, title, folder_name)
+        # Change the directory to the folder the user inputted
+        os.chdir(folder_name)
+        # Get the list of files read in
+        in_csv_files = os.listdir()
+
+        # If there are multiple csv files in the download, we can take care of them by iterating through each one
+        for i in range(len(in_csv_files)):
+            if in_csv_files[i][-4:] == ".csv":
+                in_csv_files[i] = in_csv_files[i].replace('.csv', "")
+                out_tsv = in_csv_files[i] + ".tsv"
+                out_json = in_csv_files[i] + ".json"
+                in_csv = in_csv_files[i] + ".csv"
+                # CSV-> TSV
+                csv_to_tsv(in_csv, out_tsv)
+
+                # CSV -> JSON
+                try:
+                    json_path = out_json
+                    csv_to_json(in_csv, json_path)
+                except:
+                    print("Possible UnicodeDecodeError, this data cannot be made into JSON format. Try another dataset for JSON.")
+
+                numrows_cols(in_csv)
+
+            else:
+                print(in_csv_files[i], "is not a .csv file. These transformations are only applicable to .csv files.")
+    else:
+        print("You did not enter values for all the fields (username, title, folder_name)")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
