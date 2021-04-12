@@ -21,6 +21,6 @@ To Run (still in command line): **docker run -v ${PWD}:/data etl_part -i USERNAM
 
 ## Outputs
 
-After fetching the dataset, if successful, the program will output a folder under the name you provide and it will have the files downloaded from Kaggle, and TSV/JSON versions of all CSV files in the download (if there are no unicode or weird errors while creating those versions).
+After fetching the dataset, if successful, the program will output a folder under the name you provide and it will have the files downloaded from Kaggle, and TSV/JSON versions of all CSV files in the download (if there are no unicode or weird errors while creating those versions). It will also print how many rows and columns each CSV file has.
 
 
