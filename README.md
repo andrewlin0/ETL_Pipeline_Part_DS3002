@@ -8,7 +8,7 @@ This is a project for Data Science Systems (DS 3002) at UVA. This ETL pipeline p
 
 First, you will need a Kaggle account as this script uses the Kaggle API to auhenticate. Once you have a Kaggle account, you will need your Kaggle username and unique API token. Your username should just be your username. To get your unique key: My Profile -> Account -> Scroll to API section and click "Create New API Token". This will download a file containing your username and unique key. Store this file in a folder called ".kaggle" in your root directory. This is where the Kaggle API is expecting the information to be. Another method is to store the values as environment variables. 
 
-Make sure you have Docker installed. To run the program, use **docker build -t etl_part .**
+Make sure you have Docker installed. To run the program, use **docker build -t etl_part .**           (Include the ".")
 
 Note: When running the program, you will need to provide two arguments. The username of the user who posted the dataset on Kaggle and the name of the dataset. These can be found in the URL of the page where the dataset is. Ex. https://www.kaggle.com/USERNAME/TITLE-OF-DATASET.
 
